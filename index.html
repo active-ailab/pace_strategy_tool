@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="owner" content="cs-dongqi@zepp.com">
+<meta name="organization" content="Active.Bu">
+<title>PACE 配速策略 · 生成与解析工具</title>
+<style>
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#182539;background:#f4f6fa;font-synthesis:none;--accent:#3659d9;--line:#e0e6ef;--muted:#68768b}*{box-sizing:border-box}body{margin:0}button,input,textarea,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:8px;background:white;color:#263956;padding:9px 14px;font-size:13px;font-weight:600}button:hover{background:#eef2ff;border-color:#b3c0ef}button:disabled{opacity:.5;cursor:default}.primary{background:var(--accent);color:white;border-color:var(--accent)}.primary:hover{background:#2948bd}.quiet{background:transparent}.danger{color:#a43636}a{color:var(--accent)}header{background:#14253f;color:white;padding:26px max(28px,calc((100vw - 1400px)/2));display:flex;align-items:center;justify-content:space-between;gap:24px}.eyebrow{color:#9db4e4;letter-spacing:2px;font-size:11px;font-weight:700}h1{font-size:25px;margin:8px 0}header p{color:#becce0;font-size:13px;margin:0;line-height:1.7}.badge{display:inline-flex;align-items:center;gap:7px;color:#b7e4d4;border:1px solid #3d5b68;border-radius:20px;padding:7px 12px;white-space:nowrap;font-size:12px}.dot{width:6px;height:6px;border-radius:50%;background:#71d7ac}.shell{max-width:1456px;margin:0 auto;padding:24px 28px 40px}.toolbar,.actions,.section-head,.tabs,.pager{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.toolbar{justify-content:space-between;margin-bottom:18px}.status{padding:12px 16px;border-radius:9px;background:#eaf4ef;color:#236044;font-size:13px;line-height:1.7;margin-bottom:18px;overflow-wrap:anywhere}.status.error{background:#fff0ef;color:#a12e2e}.status.info{background:#edf2ff;color:#344f99}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.stat{background:white;border:1px solid var(--line);border-radius:12px;padding:16px 20px}.stat small{color:var(--muted);font-size:12px}.stat strong{display:block;font-variant-numeric:tabular-nums;font-size:25px;letter-spacing:-.7px;margin:8px 0 4px}.stat span{font-size:11px;color:var(--muted)}.layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;overflow:hidden}.card+.card{margin-top:16px}h2{font-size:15px;margin:0}h3{font-size:13px;margin:0 0 12px}.section-head{justify-content:space-between;margin-bottom:16px}.subtle{color:var(--muted);font-size:12px;line-height:1.7}.drop{border:1px dashed #a9b9d7;border-radius:10px;padding:21px 14px;text-align:center;background:#f8faff;cursor:pointer;transition:.15s}.drop.over{background:#e6edff;border-color:var(--accent)}.drop b{display:block;font-size:13px;margin-bottom:7px}.drop:focus-visible{outline:2px solid var(--accent)}.file-name{font-size:12px;word-break:break-all;color:var(--accent);margin-top:10px}.field{display:block;margin-bottom:13px}.field>span{display:block;color:#526078;font-size:12px;margin-bottom:6px}.field input,.field select,.generator input{width:100%;border:1px solid #d5dde9;border-radius:7px;background:white;padding:9px 10px;color:#162941;font-size:13px;min-width:0}input:focus,textarea:focus,select:focus{outline:2px solid #c0cffd;border-color:#6683e7}input:invalid{border-color:#c65454}.field small{font-size:11px;color:var(--muted);line-height:1.6;display:block;margin-top:4px}.field:last-child{margin-bottom:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.full{grid-column:1/-1}.pills{font-size:11px;color:#536887;background:#f0f4fa;border-radius:5px;padding:5px 8px}.tabs{border-bottom:1px solid var(--line);margin:0 -20px 20px;padding:0 20px;gap:22px}.tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;padding:0 0 12px;background:none;color:var(--muted)}.tabs button[aria-selected=true]{border-color:var(--accent);color:var(--accent)}.panel[hidden]{display:none}.generator{padding:15px;background:#f6f8fc;border:1px solid #e5eaf3;border-radius:9px;margin-bottom:16px}.gen-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:10px 0}.generator label{font-size:11px;color:#526078;display:block}.generator input{margin-top:6px;font-size:12px}.table-wrap{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:8px}table{border-collapse:collapse;width:100%;font-size:12px;text-align:left;white-space:nowrap}th{background:#f4f7fb;color:#5c6b81;font-size:11px;font-weight:600;padding:11px 12px;position:sticky;top:0;z-index:1}td{border-top:1px solid #edf0f5;padding:7px 10px}td:first-child{color:#7a879b;font-variant-numeric:tabular-nums}td input{border:1px solid transparent;background:transparent;border-radius:5px;padding:6px;width:112px;font-variant-numeric:tabular-nums;font-size:12px;color:#25344e}td input:hover{border-color:#d5dde9}td small{display:block;color:#8490a2;font-size:10px;margin-left:6px}td button{padding:5px 8px;border:0;font-size:11px}.pager{justify-content:space-between;margin-top:12px;font-size:12px;color:var(--muted)}.pager input{width:68px;padding:6px;border:1px solid var(--line);border-radius:5px}.warning{background:#fff8e9;border:1px solid #f0deb6;color:#866019;border-radius:8px;padding:10px 13px;font-size:12px;line-height:1.8;margin:14px 0}.warning[hidden]{display:none}textarea{width:100%;height:470px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:15px;font:12px/1.7 Consolas,monospace;color:#243954;tab-size:2}.hex{background:#17243b;color:#c4d2e7;border-radius:9px;padding:17px;overflow:auto;max-height:500px;font:12px/1.85 Consolas,monospace;white-space:pre}.details{font-size:12px;line-height:1.85;color:#526078}.details table{white-space:normal;margin-top:12px}.details td{padding:8px}.details code{font-size:11px}footer{margin-top:22px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px;color:#8490a2}.header-fields .field input{font-variant-numeric:tabular-nums}#nameBytes{float:right}#jsonNote{margin:10px 0}.sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0)}@media(max-width:1050px){.layout{grid-template-columns:270px minmax(0,1fr)}.gen-grid{grid-template-columns:1fr 1fr}.stats{gap:8px}.stat{padding:14px}.stat strong{font-size:21px}}@media(max-width:780px){header{padding:22px;align-items:flex-start}.shell{padding:18px 14px}.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.badge{font-size:10px}.toolbar{gap:12px}.card{padding:17px}.tabs{margin:0 -17px 17px;padding:0 17px}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+<style>
+.layout>*{min-width:0}@media(max-width:780px){.layout{grid-template-columns:minmax(0,1fr)}header{flex-wrap:wrap}.tabs{gap:16px}}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">ACTIVE.BU / DEVELOPER TOOLS</div><h1>PACE 配速策略工具</h1><p>解析二进制 · 编辑策略 · 生成文件　<span style="color:#8da7d0">PACE v1</span></p></div><div class="badge"><span class="dot"></span>离线可用 · 文件仅在本机处理</div></header>
+<main class="shell">
+<div class="toolbar"><div class="actions"><button id="newBtn">＋ 新建策略</button><button id="sampleBtn">载入 240 段样本</button><button id="importJsonBtn">导入 JSON</button></div><div class="actions"><button id="exportJsonBtn">导出 JSON</button><button id="exportBinBtn" class="primary">↓ 生成并下载 BIN</button></div></div>
+<div id="status" class="status info" role="status" aria-live="polite">准备就绪。导入现有文件，或编辑下方示例策略后生成 BIN。</div>
+<section class="stats" aria-label="策略概览"><div class="stat"><small>分段数量 / 文件大小</small><strong id="statSegments">—</strong><span id="statSize">—</span></div><div class="stat"><small>分段距离合计</small><strong id="statDistance">—</strong><span id="statDistanceRaw">—</span></div><div class="stat"><small>分段用时合计</small><strong id="statTime">—</strong><span id="statTimeRaw">—</span></div><div class="stat"><small>总体目标配速</small><strong id="statPace">—</strong><span id="statPaceRaw">—</span></div></section>
+<div class="layout"><aside>
+<section class="card"><div class="section-head"><h2>导入与解析</h2><span class="pills">.bin</span></div><div class="drop" id="dropZone" tabindex="0" role="button" aria-label="选择或拖入 BIN 文件"><b>点击选择，或拖入 BIN 文件</b><span class="subtle">读取文件头与全部分段，校验协议格式</span></div><div class="file-name" id="sourceName">当前：新建策略</div><input id="binInput" type="file" accept=".bin,application/octet-stream" hidden><input id="jsonInput" type="file" accept=".json,application/json" hidden></section>
+<section class="card"><div class="section-head"><h2>文件信息</h2></div><div class="details">格式版本 <b>1</b> · 小端编码<br>文件头 <b>184 B</b> · 单段 <b>24 B</b><br>文件长度 = 184 + 分段数 × 24<br>名称最多 <b>127 字节 UTF-8</b></div><hr style="border:0;border-top:1px solid var(--line);margin:15px 0"><div class="subtle">输出文件名</div><div class="file-name" id="outputName">—</div><p class="subtle">按当前约定，仅使用策略 ID 命名。运动类型保留在文件头中。</p><label class="field"><span>展示单位</span><select id="units"><option value="metric">公制 · km / min/km</option><option value="imperial">英制 · mi / min/mi</option></select><small>编辑与存储固定使用 mm、ms、s/km。</small></label></section>
+<section class="card details"><h3>协议与校验</h3><a href="https://zepp.feishu.cn/wiki/UYCTwngxVifIStk50Fsck5pGn7c" target="_blank" rel="noopener noreferrer">查看飞书协议 ↗</a><p>校验魔数、版本、长度、正整数、64 位 ID、UTF-8 名称、连续序号与全部保留字段。</p><p style="margin-bottom:0">汇总差异单独提示；总体配速和分段配速均保留输入值，不自动覆盖。</p></section>
+</aside><div>
+<section class="card header-fields"><div class="section-head"><h2>策略信息</h2><span class="pills">HEADER / 184 BYTES</span></div><div class="grid" id="headerForm">
+<label class="field full"><span>策略名称 <small id="nameBytes">0 / 127 字节</small></span><input id="strategyName" autocomplete="off"><small>strategyName · 非空 UTF-8，末尾 NUL 与剩余补零由工具写入。</small></label>
+<label class="field"><span>策略 ID · uint64</span><input id="strategyId" inputmode="numeric" autocomplete="off"><small>strategyId · 使用十进制文本，无损保留 64 位精度。</small></label>
+<label class="field"><span>策略内容版本 · uint32</span><input id="strategyVersion" inputmode="numeric"><small>strategyVersion · 独立于文件格式版本。</small></label>
+<label class="field"><span>运动类型 · uint32</span><input id="sportType" inputmode="numeric"><small>sportType · 填固件 sport_type_t 编码。</small></label>
+<label class="field"><span>关联路线 ID · uint32</span><input id="routeId" inputmode="numeric"><small>routeId · 0 表示无关联路线。</small></label>
+<label class="field"><span>总体目标距离 · mm</span><input id="targetDistance" inputmode="numeric"><small id="distanceHint">—</small></label>
+<label class="field"><span>总体目标用时 · ms</span><input id="targetTime" inputmode="numeric"><small id="timeHint">—</small></label>
+<label class="field"><span>总体目标配速 · s/km</span><input id="targetPace" inputmode="numeric"><small id="paceHint">—</small></label>
+<div class="field" style="align-self:center"><button id="syncTotalsBtn">将分段合计填入总体距离与用时</button><small>不修改总体配速；汇总超出 uint32 时拒绝填入。</small></div>
+</div><div id="warnings" class="warning" hidden></div></section>
+<section class="card" id="workspace"><div class="tabs" role="tablist" aria-label="数据视图"><button id="tab-segments" role="tab" aria-selected="true" aria-controls="panel-segments" data-tab="segments">分段编辑</button><button id="tab-json" role="tab" aria-selected="false" aria-controls="panel-json" data-tab="json">JSON 编辑</button><button id="tab-binary" role="tab" aria-selected="false" aria-controls="panel-binary" data-tab="binary">二进制 / 字段布局</button></div>
+<div id="panel-segments" class="panel" role="tabpanel" aria-labelledby="tab-segments">
+<div class="generator"><div class="section-head" style="margin:0"><h3 style="margin:0">批量生成等目标分段</h3><span class="subtle">下列目标值应用于每一段</span></div><div class="gen-grid"><label>分段数量<input id="genCount" value="5" inputmode="numeric"></label><label>每段距离 · mm<input id="genDistance" value="1000000" inputmode="numeric"></label><label>每段用时 · ms<input id="genTime" value="300000" inputmode="numeric"></label><label>每段配速 · s/km<input id="genPace" value="300" inputmode="numeric"></label></div><div class="actions"><button id="replaceSegmentsBtn">替换全部分段</button><button id="appendSegmentsBtn">追加分段</button><span class="subtle">总体目标由上方按钮手动同步。</span></div></div>
+<div class="section-head"><h2>分段目标</h2><button id="addSegmentBtn">＋ 添加一段</button></div><div class="table-wrap"><table><thead><tr><th>序号 index</th><th>目标距离 · mm</th><th>目标用时 · ms</th><th>目标配速 · s/km</th><th>操作</th></tr></thead><tbody id="segmentRows"></tbody></table></div><div class="pager"><span id="pageLabel"></span><div class="actions"><button id="prevPageBtn">上一页</button><label>第 <input id="pageNumber" value="1" inputmode="numeric" aria-label="跳转页码"> 页</label><button id="nextPageBtn">下一页</button></div></div><p class="subtle" style="margin-bottom:0">每页 50 段，导出包含全部分段。序号自动连续编号，保留字段固定为 0。</p>
+</div>
+<div id="panel-json" class="panel" role="tabpanel" aria-labelledby="tab-json" hidden><div class="section-head"><h2>完整策略 JSON</h2><div class="actions"><button id="refreshJsonBtn">从当前表单刷新</button><button id="applyJsonBtn" class="primary">应用 JSON 到表单</button></div></div><p class="subtle" id="jsonNote">strategyId 必须为十进制字符串；单位固定为 mm、ms、s/km。修改后点击“应用 JSON”才会生效。</p><label for="jsonEditor" class="sr-only">策略 JSON</label><textarea id="jsonEditor" spellcheck="false"></textarea></div>
+<div id="panel-binary" class="panel" role="tabpanel" aria-labelledby="tab-binary" hidden><div class="section-head"><h2>当前策略编码预览</h2><span class="subtle">每页 256 字节 · 导出前自动重新编码</span></div><div class="hex" id="hexView"></div><div class="pager"><span id="hexLabel"></span><div class="actions"><button id="prevHexBtn">上一页</button><button id="nextHexBtn">下一页</button></div></div><details class="details" style="margin-top:18px"><summary>展开协议字段偏移</summary><table><thead><tr><th>头部偏移</th><th>字段</th><th>位宽 / 单位</th></tr></thead><tbody><tr><td>0 / 4 / 6</td><td>magic / version / headerSize</td><td>4B / u16 / u16</td></tr><tr><td>8</td><td>strategyId</td><td>u64</td></tr><tr><td>16 / 20 / 24</td><td>targetDistance / sportType / routeId</td><td>u32 mm / u32 / u32</td></tr><tr><td>28 / 32</td><td>segmentCount / recordSize</td><td>u32 / u32</td></tr><tr><td>36 / 40 / 44</td><td>targetTime / targetPace / strategyVersion</td><td>u32 ms / u32 s/km / u32</td></tr><tr><td>48 / 176</td><td>strategyName / reserved[2]</td><td>128B / 8B</td></tr><tr><td>每段 0 / 4 / 8 / 12 / 16</td><td>index / time / distance / pace / reserved[2]</td><td>u32 / u32 ms / u32 mm / u32 s/km / 8B</td></tr></tbody></table></details></div>
+</section></div></div>
+<footer><span>Owner: cs-dongqi@zepp.com / Organization: Active.Bu</span><span>协议快照：2026-11-17 · 文档 revision 449 · 无外部依赖</span></footer>
+</main>
+<script id="pace-codec">
+"use strict";
+/** @brief PACE v1 编解码，按固定偏移读写，不使用浮点数中转策略 ID。 */
+globalThis.PaceCodec = (() => {
+  const HEADER_SIZE = 184, RECORD_SIZE = 24, U32 = 4294967295, U64 = 18446744073709551615n;
+  const encoder = new TextEncoder();
+  function fail(message) { throw new Error(message); }
+  function uint(value, label, positive = false) {
+    if (typeof value !== "number" || !Number.isInteger(value) || value < (positive ? 1 : 0) || value > U32) fail(`${label} 必须为${positive ? "正" : "非负"} uint32 整数（${positive ? 1 : 0}～${U32}）`);
+    return value;
+  }
+  function id(value) {
+    if (typeof value !== "string" || !/^[0-9]+$/.test(value)) fail("strategyId 必须使用十进制字符串，不能使用 JSON 数字");
+    const n = BigInt(value);
+    if (n < 1n || n > U64) fail("strategyId 必须为非零 uint64（1～18446744073709551615）");
+    return n;
+  }
+  function reserved(value, label) {
+    if (!Array.isArray(value) || value.length !== 2 || value.some(x => x !== 0)) fail(`${label} 必须为 [0, 0]`);
+  }
+  function validate(data) {
+    if (!data || typeof data !== "object" || Array.isArray(data)) fail("JSON 根节点必须是策略对象");
+    if (data.magic !== "PACE" || data.version !== 1 || data.headerSize !== HEADER_SIZE || data.recordSize !== RECORD_SIZE) fail("仅支持 PACE v1、184 字节文件头、24 字节分段");
+    id(data.strategyId);
+    for (const key of ["sportType", "routeId", "strategyVersion"]) uint(data[key], key);
+    for (const key of ["targetDistance", "targetTime", "targetPace"]) uint(data[key], key, true);
+    if (typeof data.strategyName !== "string" || !data.strategyName.length || data.strategyName.includes("\0")) fail("strategyName 必须非空，且不能包含 NUL 字符");
+    const bytes = encoder.encode(data.strategyName);
+    if (new TextDecoder("utf-8", {fatal:true, ignoreBOM:true}).decode(bytes) !== data.strategyName) fail("strategyName 含不完整的 Unicode 字符");
+    if (bytes.length > 127) fail(`strategyName 为 ${bytes.length} 字节，超过 UTF-8 上限 127 字节`);
+    reserved(data.reserved, "文件头 reserved");
+    uint(data.segmentCount, "segmentCount", true);
+    if (!Array.isArray(data.segments) || data.segments.length !== data.segmentCount) fail("segmentCount 必须与 segments 数组长度一致，且至少有一段");
+    data.segments.forEach((s, i) => {
+      if (!s || typeof s !== "object" || s.index !== i) fail(`第 ${i} 段 index 必须为 ${i}`);
+      for (const key of ["intervalTargetDistance", "intervalTargetTime", "intervalTargetPace"]) uint(s[key], `第 ${i} 段 ${key}`, true);
+      reserved(s.reserved, `第 ${i} 段 reserved`);
+    });
+    return data;
+  }
+  function encode(data) {
+    validate(data);
+    const length = BigInt(HEADER_SIZE) + BigInt(data.segmentCount) * BigInt(RECORD_SIZE);
+    if (length > BigInt(Number.MAX_SAFE_INTEGER)) fail("编码长度超过当前浏览器可精确寻址范围");
+    let bytes;
+    try { bytes = new Uint8Array(Number(length)); } catch { fail(`无法分配 ${length} 字节编码空间，请减少本次处理规模`); }
+    const view = new DataView(bytes.buffer);
+    bytes.set(encoder.encode("PACE"));
+    view.setUint16(4, 1, true); view.setUint16(6, HEADER_SIZE, true);
+    view.setBigUint64(8, id(data.strategyId), true);
+    ["targetDistance", "sportType", "routeId", "segmentCount", "recordSize", "targetTime", "targetPace", "strategyVersion"].forEach((key, i) => view.setUint32(16 + i * 4, data[key], true));
+    bytes.set(encoder.encode(data.strategyName), 48);
+    data.segments.forEach((s, i) => {
+      const offset = HEADER_SIZE + i * RECORD_SIZE;
+      ["index", "intervalTargetTime", "intervalTargetDistance", "intervalTargetPace"].forEach((key, j) => view.setUint32(offset + j * 4, s[key], true));
+    });
+    return bytes;
+  }
+  function decode(input) {
+    const bytes = input instanceof Uint8Array ? input : new Uint8Array(input);
+    if (bytes.byteLength < HEADER_SIZE) fail(`文件不足 ${HEADER_SIZE} 字节，实际为 ${bytes.byteLength} 字节`);
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    if (bytes[0] !== 80 || bytes[1] !== 65 || bytes[2] !== 67 || bytes[3] !== 69) fail("文件魔数不是 PACE");
+    if (view.getUint16(4, true) !== 1 || view.getUint16(6, true) !== HEADER_SIZE || view.getUint32(32, true) !== RECORD_SIZE) fail("不支持的格式：需要 version=1、headerSize=184、recordSize=24");
+    const count = view.getUint32(28, true);
+    const expected = BigInt(HEADER_SIZE) + BigInt(count) * BigInt(RECORD_SIZE);
+    if (expected !== BigInt(bytes.byteLength)) fail(`文件长度不匹配：按 ${count} 段应为 ${expected} 字节，实际 ${bytes.byteLength} 字节`);
+    const nameBytes = bytes.subarray(48, 176), end = nameBytes.indexOf(0);
+    if (end < 0) fail("strategyName 缺少结尾 NUL");
+    if (nameBytes.subarray(end).some(x => x !== 0)) fail("strategyName 的 NUL 后存在非零填充");
+    let name;
+    try { name = new TextDecoder("utf-8", {fatal:true, ignoreBOM:true}).decode(nameBytes.subarray(0, end)); } catch { fail("strategyName 不是有效 UTF-8"); }
+    const data = {magic:"PACE", version:1, headerSize:HEADER_SIZE, strategyId:view.getBigUint64(8, true).toString()};
+    ["targetDistance", "sportType", "routeId", "segmentCount", "recordSize", "targetTime", "targetPace", "strategyVersion"].forEach((key, i) => { data[key] = view.getUint32(16 + i * 4, true); });
+    data.strategyName = name; data.reserved = [view.getUint32(176, true), view.getUint32(180, true)]; data.segments = [];
+    for (let i = 0; i < count; i++) {
+      const offset = HEADER_SIZE + i * RECORD_SIZE;
+      data.segments.push({index:view.getUint32(offset, true), intervalTargetTime:view.getUint32(offset + 4, true), intervalTargetDistance:view.getUint32(offset + 8, true), intervalTargetPace:view.getUint32(offset + 12, true), reserved:[view.getUint32(offset + 16, true), view.getUint32(offset + 20, true)]});
+    }
+    return validate(data);
+  }
+  function totals(data) {
+    return data.segments.reduce((sum, s) => ({distance:sum.distance + BigInt(uint(s.intervalTargetDistance, `第 ${s.index} 段距离`, true)), time:sum.time + BigInt(uint(s.intervalTargetTime, `第 ${s.index} 段时间`, true))}), {distance:0n, time:0n});
+  }
+  function filename(data) { return `${id(data.strategyId)}.bin`; }
+  function filenameWarnings(name, data) {
+    const bare = /^(\d+)\.bin$/i.exec(name), legacy = /^pace_(\d+)_(\d+)\.bin$/i.exec(name);
+    if (bare) return BigInt(bare[1]) !== id(data.strategyId) ? ["文件名中的策略 ID 与文件头不一致；导出时将按文件头重新命名。"] : [];
+    if (legacy) return BigInt(legacy[1]) !== BigInt(data.sportType) || BigInt(legacy[2]) !== id(data.strategyId) ? ["原文件名中的运动类型或策略 ID 与文件头不一致；导出时将按文件头重新命名。"] : [];
+    return ["原文件名未采用 ID.bin 命名；导出时将按文件头的策略 ID 命名。"];
+  }
+  /** @brief 使用整数比例换算与舍入，避免浮点数在恰好半分位时产生展示误差。 */
+  function formatDistance(value, imperial = false) {
+    const divisor = imperial ? 1609344n : 1000000n;
+    const hundredths = (BigInt(value) * 100n + divisor / 2n) / divisor;
+    return `${hundredths / 100n}.${String(hundredths % 100n).padStart(2,"0")} ${imperial ? "mi" : "km"}`;
+  }
+  function formatDuration(value) {
+    const seconds = (BigInt(value) + 500n) / 1000n;
+    return `${String(seconds / 3600n).padStart(2,"0")}:${String(seconds / 60n % 60n).padStart(2,"0")}:${String(seconds % 60n).padStart(2,"0")}`;
+  }
+  function formatPace(value, imperial = false) {
+    const seconds = imperial ? BigInt(value) * 1609344n / 1000000n : BigInt(value);
+    return `${seconds / 60n}:${String(seconds % 60n).padStart(2,"0")} /${imperial ? "mi" : "km"}`;
+  }
+  return {HEADER_SIZE, RECORD_SIZE, U32, U64, uint, validate, encode, decode, totals, filename, filenameWarnings, formatDistance, formatDuration, formatPace};
+})();
+</script>
+<script id="embedded-sample" type="application/json">"UEFDRQEAuAB0bWdkqXAAAAAcTg4BAAAAVHPyavAAAAAYAAAAAIgqEbAEAAABAAAA6YWN6YCf562W55WlIE1vY2sgMjQw5q61AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACATxIAQEIPALAEAAAAAAAAAAAAAAEAAACATxIAQEIPALAEAAAAAAAAAAAAAAIAAACATxIAQEIPALAEAAAAAAAAAAAAAAMAAACATxIAQEIPALAEAAAAAAAAAAAAAAQAAACATxIAQEIPALAEAAAAAAAAAAAAAAUAAACATxIAQEIPALAEAAAAAAAAAAAAAAYAAACATxIAQEIPALAEAAAAAAAAAAAAAAcAAACATxIAQEIPALAEAAAAAAAAAAAAAAgAAACATxIAQEIPALAEAAAAAAAAAAAAAAkAAACATxIAQEIPALAEAAAAAAAAAAAAAAoAAACATxIAQEIPALAEAAAAAAAAAAAAAAsAAACATxIAQEIPALAEAAAAAAAAAAAAAAwAAACATxIAQEIPALAEAAAAAAAAAAAAAA0AAACATxIAQEIPALAEAAAAAAAAAAAAAA4AAACATxIAQEIPALAEAAAAAAAAAAAAAA8AAACATxIAQEIPALAEAAAAAAAAAAAAABAAAACATxIAQEIPALAEAAAAAAAAAAAAABEAAACATxIAQEIPALAEAAAAAAAAAAAAABIAAACATxIAQEIPALAEAAAAAAAAAAAAABMAAACATxIAQEIPALAEAAAAAAAAAAAAABQAAACATxIAQEIPALAEAAAAAAAAAAAAABUAAACATxIAQEIPALAEAAAAAAAAAAAAABYAAACATxIAQEIPALAEAAAAAAAAAAAAABcAAACATxIAQEIPALAEAAAAAAAAAAAAABgAAACATxIAQEIPALAEAAAAAAAAAAAAABkAAACATxIAQEIPALAEAAAAAAAAAAAAABoAAACATxIAQEIPALAEAAAAAAAAAAAAABsAAACATxIAQEIPALAEAAAAAAAAAAAAABwAAACATxIAQEIPALAEAAAAAAAAAAAAAB0AAACATxIAQEIPALAEAAAAAAAAAAAAAB4AAACATxIAQEIPALAEAAAAAAAAAAAAAB8AAACATxIAQEIPALAEAAAAAAAAAAAAACAAAACATxIAQEIPALAEAAAAAAAAAAAAACEAAACATxIAQEIPALAEAAAAAAAAAAAAACIAAACATxIAQEIPALAEAAAAAAAAAAAAACMAAACATxIAQEIPALAEAAAAAAAAAAAAACQAAACATxIAQEIPALAEAAAAAAAAAAAAACUAAACATxIAQEIPALAEAAAAAAAAAAAAACYAAACATxIAQEIPALAEAAAAAAAAAAAAACcAAACATxIAQEIPALAEAAAAAAAAAAAAACgAAACATxIAQEIPALAEAAAAAAAAAAAAACkAAACATxIAQEIPALAEAAAAAAAAAAAAACoAAACATxIAQEIPALAEAAAAAAAAAAAAACsAAACATxIAQEIPALAEAAAAAAAAAAAAACwAAACATxIAQEIPALAEAAAAAAAAAAAAAC0AAACATxIAQEIPALAEAAAAAAAAAAAAAC4AAACATxIAQEIPALAEAAAAAAAAAAAAAC8AAACATxIAQEIPALAEAAAAAAAAAAAAADAAAACATxIAQEIPALAEAAAAAAAAAAAAADEAAACATxIAQEIPALAEAAAAAAAAAAAAADIAAACATxIAQEIPALAEAAAAAAAAAAAAADMAAACATxIAQEIPALAEAAAAAAAAAAAAADQAAACATxIAQEIPALAEAAAAAAAAAAAAADUAAACATxIAQEIPALAEAAAAAAAAAAAAADYAAACATxIAQEIPALAEAAAAAAAAAAAAADcAAACATxIAQEIPALAEAAAAAAAAAAAAADgAAACATxIAQEIPALAEAAAAAAAAAAAAADkAAACATxIAQEIPALAEAAAAAAAAAAAAADoAAACATxIAQEIPALAEAAAAAAAAAAAAADsAAACATxIAQEIPALAEAAAAAAAAAAAAADwAAACATxIAQEIPALAEAAAAAAAAAAAAAD0AAACATxIAQEIPALAEAAAAAAAAAAAAAD4AAACATxIAQEIPALAEAAAAAAAAAAAAAD8AAACATxIAQEIPALAEAAAAAAAAAAAAAEAAAACATxIAQEIPALAEAAAAAAAAAAAAAEEAAACATxIAQEIPALAEAAAAAAAAAAAAAEIAAACATxIAQEIPALAEAAAAAAAAAAAAAEMAAACATxIAQEIPALAEAAAAAAAAAAAAAEQAAACATxIAQEIPALAEAAAAAAAAAAAAAEUAAACATxIAQEIPALAEAAAAAAAAAAAAAEYAAACATxIAQEIPALAEAAAAAAAAAAAAAEcAAACATxIAQEIPALAEAAAAAAAAAAAAAEgAAACATxIAQEIPALAEAAAAAAAAAAAAAEkAAACATxIAQEIPALAEAAAAAAAAAAAAAEoAAACATxIAQEIPALAEAAAAAAAAAAAAAEsAAACATxIAQEIPALAEAAAAAAAAAAAAAEwAAACATxIAQEIPALAEAAAAAAAAAAAAAE0AAACATxIAQEIPALAEAAAAAAAAAAAAAE4AAACATxIAQEIPALAEAAAAAAAAAAAAAE8AAACATxIAQEIPALAEAAAAAAAAAAAAAFAAAACATxIAQEIPALAEAAAAAAAAAAAAAFEAAACATxIAQEIPALAEAAAAAAAAAAAAAFIAAACATxIAQEIPALAEAAAAAAAAAAAAAFMAAACATxIAQEIPALAEAAAAAAAAAAAAAFQAAACATxIAQEIPALAEAAAAAAAAAAAAAFUAAACATxIAQEIPALAEAAAAAAAAAAAAAFYAAACATxIAQEIPALAEAAAAAAAAAAAAAFcAAACATxIAQEIPALAEAAAAAAAAAAAAAFgAAACATxIAQEIPALAEAAAAAAAAAAAAAFkAAACATxIAQEIPALAEAAAAAAAAAAAAAFoAAACATxIAQEIPALAEAAAAAAAAAAAAAFsAAACATxIAQEIPALAEAAAAAAAAAAAAAFwAAACATxIAQEIPALAEAAAAAAAAAAAAAF0AAACATxIAQEIPALAEAAAAAAAAAAAAAF4AAACATxIAQEIPALAEAAAAAAAAAAAAAF8AAACATxIAQEIPALAEAAAAAAAAAAAAAGAAAACATxIAQEIPALAEAAAAAAAAAAAAAGEAAACATxIAQEIPALAEAAAAAAAAAAAAAGIAAACATxIAQEIPALAEAAAAAAAAAAAAAGMAAACATxIAQEIPALAEAAAAAAAAAAAAAGQAAACATxIAQEIPALAEAAAAAAAAAAAAAGUAAACATxIAQEIPALAEAAAAAAAAAAAAAGYAAACATxIAQEIPALAEAAAAAAAAAAAAAGcAAACATxIAQEIPALAEAAAAAAAAAAAAAGgAAACATxIAQEIPALAEAAAAAAAAAAAAAGkAAACATxIAQEIPALAEAAAAAAAAAAAAAGoAAACATxIAQEIPALAEAAAAAAAAAAAAAGsAAACATxIAQEIPALAEAAAAAAAAAAAAAGwAAACATxIAQEIPALAEAAAAAAAAAAAAAG0AAACATxIAQEIPALAEAAAAAAAAAAAAAG4AAACATxIAQEIPALAEAAAAAAAAAAAAAG8AAACATxIAQEIPALAEAAAAAAAAAAAAAHAAAACATxIAQEIPALAEAAAAAAAAAAAAAHEAAACATxIAQEIPALAEAAAAAAAAAAAAAHIAAACATxIAQEIPALAEAAAAAAAAAAAAAHMAAACATxIAQEIPALAEAAAAAAAAAAAAAHQAAACATxIAQEIPALAEAAAAAAAAAAAAAHUAAACATxIAQEIPALAEAAAAAAAAAAAAAHYAAACATxIAQEIPALAEAAAAAAAAAAAAAHcAAACATxIAQEIPALAEAAAAAAAAAAAAAHgAAACATxIAQEIPALAEAAAAAAAAAAAAAHkAAACATxIAQEIPALAEAAAAAAAAAAAAAHoAAACATxIAQEIPALAEAAAAAAAAAAAAAHsAAACATxIAQEIPALAEAAAAAAAAAAAAAHwAAACATxIAQEIPALAEAAAAAAAAAAAAAH0AAACATxIAQEIPALAEAAAAAAAAAAAAAH4AAACATxIAQEIPALAEAAAAAAAAAAAAAH8AAACATxIAQEIPALAEAAAAAAAAAAAAAIAAAACATxIAQEIPALAEAAAAAAAAAAAAAIEAAACATxIAQEIPALAEAAAAAAAAAAAAAIIAAACATxIAQEIPALAEAAAAAAAAAAAAAIMAAACATxIAQEIPALAEAAAAAAAAAAAAAIQAAACATxIAQEIPALAEAAAAAAAAAAAAAIUAAACATxIAQEIPALAEAAAAAAAAAAAAAIYAAACATxIAQEIPALAEAAAAAAAAAAAAAIcAAACATxIAQEIPALAEAAAAAAAAAAAAAIgAAACATxIAQEIPALAEAAAAAAAAAAAAAIkAAACATxIAQEIPALAEAAAAAAAAAAAAAIoAAACATxIAQEIPALAEAAAAAAAAAAAAAIsAAACATxIAQEIPALAEAAAAAAAAAAAAAIwAAACATxIAQEIPALAEAAAAAAAAAAAAAI0AAACATxIAQEIPALAEAAAAAAAAAAAAAI4AAACATxIAQEIPALAEAAAAAAAAAAAAAI8AAACATxIAQEIPALAEAAAAAAAAAAAAAJAAAACATxIAQEIPALAEAAAAAAAAAAAAAJEAAACATxIAQEIPALAEAAAAAAAAAAAAAJIAAACATxIAQEIPALAEAAAAAAAAAAAAAJMAAACATxIAQEIPALAEAAAAAAAAAAAAAJQAAACATxIAQEIPALAEAAAAAAAAAAAAAJUAAACATxIAQEIPALAEAAAAAAAAAAAAAJYAAACATxIAQEIPALAEAAAAAAAAAAAAAJcAAACATxIAQEIPALAEAAAAAAAAAAAAAJgAAACATxIAQEIPALAEAAAAAAAAAAAAAJkAAACATxIAQEIPALAEAAAAAAAAAAAAAJoAAACATxIAQEIPALAEAAAAAAAAAAAAAJsAAACATxIAQEIPALAEAAAAAAAAAAAAAJwAAACATxIAQEIPALAEAAAAAAAAAAAAAJ0AAACATxIAQEIPALAEAAAAAAAAAAAAAJ4AAACATxIAQEIPALAEAAAAAAAAAAAAAJ8AAACATxIAQEIPALAEAAAAAAAAAAAAAKAAAACATxIAQEIPALAEAAAAAAAAAAAAAKEAAACATxIAQEIPALAEAAAAAAAAAAAAAKIAAACATxIAQEIPALAEAAAAAAAAAAAAAKMAAACATxIAQEIPALAEAAAAAAAAAAAAAKQAAACATxIAQEIPALAEAAAAAAAAAAAAAKUAAACATxIAQEIPALAEAAAAAAAAAAAAAKYAAACATxIAQEIPALAEAAAAAAAAAAAAAKcAAACATxIAQEIPALAEAAAAAAAAAAAAAKgAAACATxIAQEIPALAEAAAAAAAAAAAAAKkAAACATxIAQEIPALAEAAAAAAAAAAAAAKoAAACATxIAQEIPALAEAAAAAAAAAAAAAKsAAACATxIAQEIPALAEAAAAAAAAAAAAAKwAAACATxIAQEIPALAEAAAAAAAAAAAAAK0AAACATxIAQEIPALAEAAAAAAAAAAAAAK4AAACATxIAQEIPALAEAAAAAAAAAAAAAK8AAACATxIAQEIPALAEAAAAAAAAAAAAALAAAACATxIAQEIPALAEAAAAAAAAAAAAALEAAACATxIAQEIPALAEAAAAAAAAAAAAALIAAACATxIAQEIPALAEAAAAAAAAAAAAALMAAACATxIAQEIPALAEAAAAAAAAAAAAALQAAACATxIAQEIPALAEAAAAAAAAAAAAALUAAACATxIAQEIPALAEAAAAAAAAAAAAALYAAACATxIAQEIPALAEAAAAAAAAAAAAALcAAACATxIAQEIPALAEAAAAAAAAAAAAALgAAACATxIAQEIPALAEAAAAAAAAAAAAALkAAACATxIAQEIPALAEAAAAAAAAAAAAALoAAACATxIAQEIPALAEAAAAAAAAAAAAALsAAACATxIAQEIPALAEAAAAAAAAAAAAALwAAACATxIAQEIPALAEAAAAAAAAAAAAAL0AAACATxIAQEIPALAEAAAAAAAAAAAAAL4AAACATxIAQEIPALAEAAAAAAAAAAAAAL8AAACATxIAQEIPALAEAAAAAAAAAAAAAMAAAACATxIAQEIPALAEAAAAAAAAAAAAAMEAAACATxIAQEIPALAEAAAAAAAAAAAAAMIAAACATxIAQEIPALAEAAAAAAAAAAAAAMMAAACATxIAQEIPALAEAAAAAAAAAAAAAMQAAACATxIAQEIPALAEAAAAAAAAAAAAAMUAAACATxIAQEIPALAEAAAAAAAAAAAAAMYAAACATxIAQEIPALAEAAAAAAAAAAAAAMcAAACATxIAQEIPALAEAAAAAAAAAAAAAMgAAACATxIAQEIPALAEAAAAAAAAAAAAAMkAAACATxIAQEIPALAEAAAAAAAAAAAAAMoAAACATxIAQEIPALAEAAAAAAAAAAAAAMsAAACATxIAQEIPALAEAAAAAAAAAAAAAMwAAACATxIAQEIPALAEAAAAAAAAAAAAAM0AAACATxIAQEIPALAEAAAAAAAAAAAAAM4AAACATxIAQEIPALAEAAAAAAAAAAAAAM8AAACATxIAQEIPALAEAAAAAAAAAAAAANAAAACATxIAQEIPALAEAAAAAAAAAAAAANEAAACATxIAQEIPALAEAAAAAAAAAAAAANIAAACATxIAQEIPALAEAAAAAAAAAAAAANMAAACATxIAQEIPALAEAAAAAAAAAAAAANQAAACATxIAQEIPALAEAAAAAAAAAAAAANUAAACATxIAQEIPALAEAAAAAAAAAAAAANYAAACATxIAQEIPALAEAAAAAAAAAAAAANcAAACATxIAQEIPALAEAAAAAAAAAAAAANgAAACATxIAQEIPALAEAAAAAAAAAAAAANkAAACATxIAQEIPALAEAAAAAAAAAAAAANoAAACATxIAQEIPALAEAAAAAAAAAAAAANsAAACATxIAQEIPALAEAAAAAAAAAAAAANwAAACATxIAQEIPALAEAAAAAAAAAAAAAN0AAACATxIAQEIPALAEAAAAAAAAAAAAAN4AAACATxIAQEIPALAEAAAAAAAAAAAAAN8AAACATxIAQEIPALAEAAAAAAAAAAAAAOAAAACATxIAQEIPALAEAAAAAAAAAAAAAOEAAACATxIAQEIPALAEAAAAAAAAAAAAAOIAAACATxIAQEIPALAEAAAAAAAAAAAAAOMAAACATxIAQEIPALAEAAAAAAAAAAAAAOQAAACATxIAQEIPALAEAAAAAAAAAAAAAOUAAACATxIAQEIPALAEAAAAAAAAAAAAAOYAAACATxIAQEIPALAEAAAAAAAAAAAAAOcAAACATxIAQEIPALAEAAAAAAAAAAAAAOgAAACATxIAQEIPALAEAAAAAAAAAAAAAOkAAACATxIAQEIPALAEAAAAAAAAAAAAAOoAAACATxIAQEIPALAEAAAAAAAAAAAAAOsAAACATxIAQEIPALAEAAAAAAAAAAAAAOwAAACATxIAQEIPALAEAAAAAAAAAAAAAO0AAACATxIAQEIPALAEAAAAAAAAAAAAAO4AAACATxIAQEIPALAEAAAAAAAAAAAAAO8AAACATxIAQEIPALAEAAAAAAAAAAAAAA=="</script>
+<script id="pace-ui">
+"use strict";
+(() => {
+  const C = PaceCodec, $ = id => document.getElementById(id), encoder = new TextEncoder();
+  const fields = ["strategyName", "strategyId", "strategyVersion", "sportType", "routeId", "targetDistance", "targetTime", "targetPace"];
+  const numeric = ["strategyVersion", "sportType", "routeId", "targetDistance", "targetTime", "targetPace"];
+  const labels = {intervalTargetDistance:"目标距离", intervalTargetTime:"目标用时", intervalTargetPace:"目标配速"};
+  let model, page = 0, hexPage = 0, activeTab = "segments", sourceWarnings = [], jsonDirty = false, fileSequence = 0;
+  function number(text) { return /^[0-9]+$/.test(String(text)) ? Number(text) : NaN; }
+  function status(text, type = "success") { $("status").textContent = text; $("status").className = `status ${type}`; }
+  function guarded(action) { try { return action(); } catch (e) { status(e.message, "error"); } }
+  function rawForm() {
+    const d = {...model, segments:model.segments.map(s => ({...s, reserved:[...s.reserved]}))};
+    fields.forEach(key => { d[key] = numeric.includes(key) ? number($(key).value) : $(key).value; });
+    d.segmentCount = d.segments.length;
+    return d;
+  }
+  function validForm() { return C.validate(rawForm()); }
+  function distance(value) { return C.formatDistance(value, $("units").value === "imperial"); }
+  function duration(value) { return C.formatDuration(value); }
+  function pace(value) { return C.formatPace(value, $("units").value === "imperial"); }
+  function fill(data, label, warnings = []) {
+    C.validate(data); model = data; sourceWarnings = warnings; page = 0; hexPage = 0;
+    fields.forEach(key => { $(key).value = data[key]; });
+    $("sourceName").textContent = `当前：${label}`;
+    renderRows(); update();
+    $("jsonEditor").value = JSON.stringify(data, null, 2); jsonDirty = false;
+    if (activeTab === "binary") renderHex();
+  }
+  function update() {
+    const d = rawForm();
+    $("nameBytes").textContent = `${encoder.encode(d.strategyName).length} / 127 字节`;
+    $("distanceHint").textContent = Number.isFinite(d.targetDistance) ? distance(d.targetDistance) : "请输入整数 mm";
+    $("timeHint").textContent = Number.isFinite(d.targetTime) ? duration(d.targetTime) : "请输入整数 ms";
+    $("paceHint").textContent = Number.isFinite(d.targetPace) ? pace(d.targetPace) : "请输入整数 s/km";
+    $("statSegments").textContent = d.segmentCount.toLocaleString();
+    $("statSize").textContent = `${(184 + d.segmentCount * 24).toLocaleString()} 字节`;
+    $("statPace").textContent = Number.isFinite(d.targetPace) ? pace(d.targetPace) : "—";
+    $("statPaceRaw").textContent = `${Number.isFinite(d.targetPace) ? d.targetPace : "—"} s/km · 直接使用输入值`;
+    try { $("outputName").textContent = C.filename(d); } catch { $("outputName").textContent = "请输入有效的策略 ID"; }
+    let warnings = [...sourceWarnings];
+    try {
+      const sum = C.totals(d);
+      $("statDistance").textContent = distance(sum.distance); $("statTime").textContent = duration(sum.time);
+      $("statDistanceRaw").textContent = `${sum.distance.toLocaleString()} mm`; $("statTimeRaw").textContent = `${sum.time.toLocaleString()} ms`;
+      if (sum.distance !== BigInt(Number.isInteger(d.targetDistance) ? d.targetDistance : 0)) warnings.push(`距离合计 ${sum.distance} mm，与总体目标 ${d.targetDistance} mm 不同。`);
+      if (sum.time !== BigInt(Number.isInteger(d.targetTime) ? d.targetTime : 0)) warnings.push(`用时合计 ${sum.time} ms，与总体目标 ${d.targetTime} ms 不同。`);
+    } catch {
+      $("statDistance").textContent = "—"; $("statTime").textContent = "—";
+      $("statDistanceRaw").textContent = "分段含无效数据"; $("statTimeRaw").textContent = "请修正后导出";
+    }
+    try { C.validate(d); $("exportBinBtn").disabled = false; }
+    catch (e) { warnings.unshift(e.message); $("exportBinBtn").disabled = true; }
+    $("warnings").textContent = warnings.join("\n"); $("warnings").style.whiteSpace = "pre-line"; $("warnings").hidden = !warnings.length;
+    if (activeTab === "binary") renderHex();
+  }
+  function renderRows() {
+    const pages = Math.max(1, Math.ceil(model.segments.length / 50)); page = Math.max(0, Math.min(page, pages - 1));
+    const fragment = document.createDocumentFragment();
+    model.segments.slice(page * 50, page * 50 + 50).forEach(s => {
+      const row = document.createElement("tr"), index = document.createElement("td"); index.textContent = String(s.index).padStart(3,"0"); row.append(index);
+      ["intervalTargetDistance", "intervalTargetTime", "intervalTargetPace"].forEach(key => {
+        const cell = document.createElement("td"), input = document.createElement("input"), hint = document.createElement("small");
+        input.value = Number.isFinite(s[key]) ? s[key] : ""; input.inputMode = "numeric"; input.dataset.index = s.index; input.dataset.key = key;
+        input.setAttribute("aria-label", `第 ${s.index} 段${labels[key]}`);
+        hint.textContent = Number.isFinite(s[key]) ? (key === "intervalTargetDistance" ? distance(s[key]) : key === "intervalTargetTime" ? duration(s[key]) : pace(s[key])) : "无效输入";
+        cell.append(input, hint); row.append(cell);
+      });
+      const cell = document.createElement("td"), button = document.createElement("button"); button.textContent = "删除"; button.className = "danger"; button.dataset.delete = s.index; button.setAttribute("aria-label", `删除第 ${s.index} 段`); cell.append(button); row.append(cell); fragment.append(row);
+    });
+    $("segmentRows").replaceChildren(fragment); $("pageNumber").value = page + 1;
+    $("pageLabel").textContent = `共 ${model.segments.length} 段 · 第 ${page + 1} / ${pages} 页`;
+    $("prevPageBtn").disabled = page === 0; $("nextPageBtn").disabled = page + 1 >= pages;
+  }
+  function renderHex() {
+    try {
+      const bytes = C.encode(validForm()), pages = Math.ceil(bytes.length / 256); hexPage = Math.max(0, Math.min(hexPage, pages - 1));
+      const start = hexPage * 256, end = Math.min(start + 256, bytes.length), lines = [];
+      for (let i = start; i < end; i += 16) {
+        const block = bytes.subarray(i, Math.min(i + 16, end)), hex = Array.from(block, n => n.toString(16).padStart(2,"0")).join(" ");
+        const ascii = Array.from(block, n => n >= 32 && n < 127 ? String.fromCharCode(n) : ".").join("");
+        lines.push(`${i.toString(16).padStart(8,"0")}  ${hex.padEnd(47)}  ${ascii}`);
+      }
+      $("hexView").textContent = lines.join("\n"); $("hexLabel").textContent = `${start}～${end - 1} / ${bytes.length} 字节 · 第 ${hexPage + 1} / ${pages} 页`;
+      $("prevHexBtn").disabled = hexPage === 0; $("nextHexBtn").disabled = hexPage + 1 >= pages;
+    } catch (e) { $("hexView").textContent = e.message; $("hexLabel").textContent = "修正数据后可预览"; $("prevHexBtn").disabled = true; $("nextHexBtn").disabled = true; }
+  }
+  function newStrategy() {
+    return {magic:"PACE", version:1, headerSize:184, strategyId:"123872836283765", targetDistance:5000000, sportType:1, routeId:0, segmentCount:5, recordSize:24, targetTime:1500000, targetPace:300, strategyVersion:1, strategyName:"5 km 配速策略", reserved:[0,0], segments:Array.from({length:5}, (_, index) => ({index, intervalTargetTime:300000, intervalTargetDistance:1000000, intervalTargetPace:300, reserved:[0,0]}))};
+  }
+  function batch(append) {
+    const count = C.uint(number($("genCount").value), "分段数量", true), time = C.uint(number($("genTime").value), "每段用时", true), dist = C.uint(number($("genDistance").value), "每段距离", true), targetPace = C.uint(number($("genPace").value), "每段配速", true);
+    const start = append ? model.segments.length : 0; C.uint(start + count, "合计分段数量", true);
+    const segments = append ? model.segments.slice() : [];
+    for (let i = 0; i < count; i++) segments.push({index:start + i, intervalTargetTime:time, intervalTargetDistance:dist, intervalTargetPace:targetPace, reserved:[0,0]});
+    model.segments = segments; page = 0; renderRows(); update(); status(`已${append ? "追加" : "替换为"} ${count} 段；总体距离和用时可点击上方按钮同步。`, "info");
+  }
+  function download(content, name, type) {
+    const url = URL.createObjectURL(new Blob([content], {type})), a = document.createElement("a"); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+  function ensureAppliedJSON() { if (jsonDirty) throw new Error("JSON 编辑区有尚未应用的修改，请先点击“应用 JSON 到表单”，或“从当前表单刷新”放弃这些修改。"); }
+  async function importFile(file, json = false) {
+    if (!file) return;
+    const sequence = ++fileSequence;
+    try {
+      const content = json ? await file.text() : new Uint8Array(await file.arrayBuffer());
+      if (sequence !== fileSequence) return;
+      const data = json ? C.validate(JSON.parse(content)) : C.decode(content);
+      fill(data, file.name, json ? [] : C.filenameWarnings(file.name, data));
+      status(`解析成功：${file.name} · ${data.segmentCount} 段 · ${184 + data.segmentCount * 24} 字节。格式校验全部通过。`);
+    } catch (e) { if (sequence === fileSequence) status(`导入失败：${e.message}。当前策略未替换。`, "error"); }
+  }
+  $("headerForm").addEventListener("input", update);
+  $("segmentRows").addEventListener("input", event => {
+    const input = event.target; if (!input.dataset.key) return;
+    model.segments[Number(input.dataset.index)][input.dataset.key] = number(input.value);
+    const value = number(input.value); input.nextElementSibling.textContent = Number.isFinite(value) ? (input.dataset.key === "intervalTargetDistance" ? distance(value) : input.dataset.key === "intervalTargetTime" ? duration(value) : pace(value)) : "无效输入";
+    update();
+  });
+  $("segmentRows").addEventListener("click", event => {
+    const button = event.target.closest("button[data-delete]"); if (!button) return;
+    if (model.segments.length === 1) { status("至少保留一段；可编辑这一段或批量替换。", "error"); return; }
+    model.segments.splice(Number(button.dataset.delete), 1); model.segments.forEach((s,i) => { s.index = i; }); renderRows(); update();
+  });
+  $("newBtn").onclick = () => { ++fileSequence; fill(newStrategy(), "新建策略"); status("已新建 5 km 示例策略，可直接修改。", "info"); };
+  $("sampleBtn").onclick = () => guarded(() => {
+    ++fileSequence; const binary = atob(JSON.parse($("embedded-sample").textContent)), bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    fill(C.decode(bytes), "pace_1_123872836283764.bin（内置原始样本）"); status("已载入原始样本：240 段 / 5,944 字节 / 策略 ID 123872836283764。");
+  });
+  $("replaceSegmentsBtn").onclick = () => guarded(() => batch(false)); $("appendSegmentsBtn").onclick = () => guarded(() => batch(true));
+  $("addSegmentBtn").onclick = () => guarded(() => {
+    C.uint(model.segments.length + 1, "分段数量", true);
+    const last = model.segments.at(-1); model.segments.push({...last, index:model.segments.length, reserved:[0,0]}); page = Math.floor((model.segments.length - 1) / 50); renderRows(); update();
+  });
+  $("syncTotalsBtn").onclick = () => guarded(() => {
+    const sum = C.totals(rawForm()); if (sum.distance > BigInt(C.U32) || sum.time > BigInt(C.U32)) throw new Error("分段合计超过 uint32 上限，无法填入总体目标");
+    $("targetDistance").value = sum.distance.toString(); $("targetTime").value = sum.time.toString(); update(); status("已同步总体距离和用时；总体配速保留原值。");
+  });
+  $("exportBinBtn").onclick = () => guarded(() => { ensureAppliedJSON(); const d = validForm(), bytes = C.encode(d); download(bytes, C.filename(d), "application/octet-stream"); status(`已生成 ${C.filename(d)} · ${bytes.length} 字节 · ${d.segmentCount} 段。`); });
+  $("exportJsonBtn").onclick = () => guarded(() => { ensureAppliedJSON(); const d = validForm(); download(JSON.stringify(d, null, 2), C.filename(d).replace(/\.bin$/, ".json"), "application/json;charset=utf-8"); status("已导出 JSON，策略 ID 使用字符串保留完整精度。"); });
+  $("refreshJsonBtn").onclick = () => guarded(() => { $("jsonEditor").value = JSON.stringify(validForm(), null, 2); jsonDirty = false; status("JSON 已按当前表单刷新。", "info"); });
+  $("applyJsonBtn").onclick = () => guarded(() => { const d = C.validate(JSON.parse($("jsonEditor").value)); fill(d, "JSON 编辑内容"); status("JSON 校验通过，已应用到表单。"); });
+  $("jsonEditor").addEventListener("input", () => { jsonDirty = true; });
+  document.querySelectorAll("[data-tab]").forEach(button => { button.onclick = () => {
+    activeTab = button.dataset.tab; document.querySelectorAll("[data-tab]").forEach(b => { b.setAttribute("aria-selected", String(b === button)); });
+    for (const tab of ["segments", "json", "binary"]) $(`panel-${tab}`).hidden = tab !== activeTab;
+    if (activeTab === "json" && !jsonDirty) guarded(() => { $("jsonEditor").value = JSON.stringify(validForm(), null, 2); });
+    if (activeTab === "binary") renderHex();
+  }; });
+  $("prevPageBtn").onclick = () => { page--; renderRows(); }; $("nextPageBtn").onclick = () => { page++; renderRows(); };
+  $("pageNumber").onchange = () => guarded(() => { const p = number($("pageNumber").value); if (!Number.isInteger(p) || p < 1 || p > Math.ceil(model.segments.length / 50)) throw new Error("页码超出范围"); page = p - 1; renderRows(); });
+  $("prevHexBtn").onclick = () => { hexPage--; renderHex(); }; $("nextHexBtn").onclick = () => { hexPage++; renderHex(); };
+  $("units").onchange = () => { renderRows(); update(); };
+  $("dropZone").onclick = () => $("binInput").click(); $("dropZone").onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("binInput").click(); } };
+  $("binInput").onchange = e => { importFile(e.target.files[0]); e.target.value = ""; }; $("importJsonBtn").onclick = () => $("jsonInput").click(); $("jsonInput").onchange = e => { importFile(e.target.files[0], true); e.target.value = ""; };
+  ["dragenter", "dragover"].forEach(type => $("dropZone").addEventListener(type, e => { e.preventDefault(); $("dropZone").classList.add("over"); }));
+  ["dragleave", "drop"].forEach(type => $("dropZone").addEventListener(type, e => { e.preventDefault(); $("dropZone").classList.remove("over"); }));
+  $("dropZone").addEventListener("drop", e => { importFile(e.dataTransfer.files[0]); });
+  fill(newStrategy(), "新建策略");
+})();
+</script>
+</body>
+</html>
